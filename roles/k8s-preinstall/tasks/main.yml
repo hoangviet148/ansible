@@ -1,0 +1,35 @@
+---
+
+- name: apt-get update
+  apt:
+    update_cache: yes
+
+- name: change hosts file
+  copy: 
+    src: "{{ item.src }}" 
+    dest: "{{ item.dest }}" 
+  with_items:
+  - { src: '../files/hosts', dest: '/etc' }
+  - { src: '../files/k8s.conf', dest: '/etc/sysctl.d' }
+
+- name: enable br_netfilter module
+  shell: "{{ item }}"
+  with_items:
+    - modprobe br_netfilter
+    # - echo 'br_netfilter' >> /etc/modules
+  when: disable_swap == 1
+  notify: "sysctl --system"
+
+- name: disable swap 
+  shell: swapoff -a
+  when: disable_swap == 1
+
+- name: disable swap in fstab
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+- name: reboot
+  reboot:
+...

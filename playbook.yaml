@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  user: ansible
+  roles:
+    - passwd-rootlogin
+    - k8s-preinstall
+  tags:
+    - preinstall
+
+...

@@ -1,0 +1,17 @@
+---
+
+- name: change root password
+  user: 
+    name: "root"
+    update_password: always
+    password: "{{ newpassword|password_hash('sha512') }}"
+
+- name: enable root login
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: "PermitRootLogin yes"
+    state: present
+    backup: yes
+  notify: "restart ssh"
+...
