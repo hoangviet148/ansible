@@ -8,4 +8,11 @@
   tags:
     - preinstall
 
+- hosts: all
+  user: ansible
+  roles:
+    - k8s-install
+  tags:
+    - install
+
 ...

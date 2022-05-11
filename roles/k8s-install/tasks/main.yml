@@ -1,0 +1,96 @@
+---
+tasks:
+- name: add k8s key
+  apt_key:
+    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+    state: present
+  when: kube_key == "no"
+
+- name: add k8s repo
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+  when: kube_key == "no"
+
+- name: apt-get update
+  apt:
+    update_cache: yes
+  when: kube_key == "no"
+
+- name: install kubectl, kubeadm, kubelet
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - "gnupg2 "
+    - "apt-transport-https"
+    - "software-properties-common"
+    - "kubectl"
+    - "kubelet"
+    - "kubeadm"
+  when: kube_installed == "no"
+
+- name: add cri-o key
+  apt_key:
+    url: "{{ item }}"
+    state: present
+  loop:
+    - https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:{{VERSION}}/{{OS}}/Release.key
+    - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{OS}}/Release.key
+  when: crio_key == "no"
+
+- name: add cri-o repo 1
+  apt_repository:
+    repo: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{OS}}/ /
+    filename: devel.kubic.libcontainers.stable
+  when: crio_repo == "no"
+
+- name: add cri-o repo 2
+  apt_repository:
+    repo: deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{VERSION}}/{{OS}}/ /
+    filename: devel.kubic.libcontainers.stable.cri-o.{{VERSION}}
+  when: crio_repo == "no"
+
+- name: install cri-o
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - "cri-o"
+    - "cri-o-runc"
+  when: crio_installed == "no"
+
+- name: Start and enable CRI-O
+  command: "{{ item }}"
+  loop:
+    - "systemctl daemon-reload"
+    - "systemctl enable crio --now"
+    - "systemctl enable kubelet"
+  when: enable_crio == "no"
+
+
+- name: k8s cluster init
+  hosts: k8s-master
+  tasks:
+    - block:
+      - name: kubeadm init
+        command: kubeadm init --apiserver-advertise-address=192.168.75.128 --pod-network-cidr=10.10.0.0/24
+        when: init == "no"
+
+      - name: edit config file
+        file:
+          path: /root/.kube
+          state: directory
+        when: init == "no"
+
+      - name: edit config file
+        command: cp -i /etc/kubernetes/admin.conf /root/.kube/config
+        when: init == "no"
+
+      - name: edit config file
+        file: path="/root/.kube/config" owner="root"
+        when: init == "no"
+
+      - name: edit config file
+        command: KUBECONFIG=/etc/kubernetes/admin.conf
+        when: init == "no"
+...
