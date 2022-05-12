@@ -1,0 +1,7 @@
+---
+
+- name: Remove the taint
+  shell: kubectl taint nodes --all node-role.kubernetes.io/master-
+
+- name: Install the Tigera C
+...
