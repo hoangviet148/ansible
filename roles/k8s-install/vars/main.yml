@@ -1,12 +1,12 @@
 ---
 
-kube_key: "yes"
-kube_installed: "yes"
-crio_key: "yes"
-crio_repo: "yes"
-crio_installed: "yes"
-enable_crio: "yes"
-init: "yes"
+kube_key: "no"
+kube_installed: "no"
+crio_key: "no"
+crio_repo: "no"
+crio_installed: "no"
+enable_crio: "no"
+init: "no"
 
 OS: xUbuntu_20.04
 VERSION: 1.22

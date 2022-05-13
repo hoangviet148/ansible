@@ -1,11 +1,9 @@
 ---
 - name: component-install
   include_tasks: component-install.yaml
-  run_once: yes
 
 - name: cluster-init
   include_tasks: cluster-init.yaml
   when: inventory_hostname in groups['k8s-master']
-  run_once: yes
   
 ...
