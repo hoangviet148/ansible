@@ -6,7 +6,7 @@
     - passwd-rootlogin
     - k8s-preinstall
   tags:
-    - preinstall
+    - pre-install
 
 - hosts: all
   user: ansible

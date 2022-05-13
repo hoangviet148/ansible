@@ -1,6 +1,6 @@
 ---
 
 - name: sysctl --system
-  shell: sysctl -p --system
+  shell: sysctl --system
 
 ...
