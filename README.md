@@ -2,7 +2,7 @@
 
 ### 1. Init ssh connection
 ```
-bash ssh-copy.sh
+bash ssh-copy.sh $USER
 ```
 
 ### 2. Install cluster

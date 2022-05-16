@@ -1,0 +1,37 @@
+---
+
+- name: install docker
+  include_tasks: docker-install.yaml
+
+- name: download minikube
+  get_url: 
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /home/hoang
+
+- name: copy minikube to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: /home/hoang/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    mode: 0755
+
+- name: install kubectl 1
+  uri:
+    url: https://storage.googleapis.com/kubernetes-release/release/stable.txt
+    method: GET
+    register: temp
+
+- name: install kubectl 2
+  uri:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{ temp }}/bin/linux/amd64/kubectl
+    method: GET
+
+- name: copy kubectl to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: /home/hoang/kubectl 
+    dest: /usr/local/bin
+    mode: 0755
+
+- name: start minikube
+  shell: minikube start --addons=ingress --cpus=2 --cni=flannel --install-addons=true --kubernetes-version=stable --memory=4g

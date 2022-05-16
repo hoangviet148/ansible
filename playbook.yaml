@@ -15,4 +15,10 @@
   tags:
     - install
 
+- hosts: k8s-master
+  user: hoang
+  roles:
+    - minikube-install
+  tags:
+    - minikube-install
 ...
