@@ -1,7 +1,7 @@
 ---
 
 - name: kubeadm init
-  command: kubeadm init --apiserver-advertise-address=192.168.75.128 --pod-network-cidr=10.10.0.0/24
+  command: kubeadm init --apiserver-advertise-address=192.168.75.128 
   when: init == "no"
 
 - name: edit config file 1
@@ -19,12 +19,12 @@
     group: root
   when: init == "no"
 
-- name: edit config file 3
-  shell: "export KUBECONFIG=/etc/kubernetes/admin.conf"
-  when: init == "no"
+# - name: edit config file 3
+#   shell: "export KUBECONFIG=/etc/kubernetes/admin.conf"
+#   when: init == "no"
 
 - name: install calico
-  shell: {{ item }}
+  shell: "{{ item }}"
   loop: 
     - kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
     - kubectl create -f https://projectcalico.docs.tigera.io/manifests/custom-resources.yaml

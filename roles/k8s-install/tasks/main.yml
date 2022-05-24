@@ -5,5 +5,33 @@
 - name: cluster-init
   include_tasks: cluster-init.yaml
   when: inventory_hostname in groups['k8s-master']
+
+- name: get join cluster command
+  shell: "{{ item }}"
+  loop: 
+    - "kubeadm token create --print-join-command"
+  when: inventory_hostname in groups['k8s-master']
+  register: join_command
+
+- name: save join_command to master /tmp
+  local_action: copy content="{{ item.stdout_lines[0] }}" dest="/tmp/join_command" mode=0777
+  loop: "{{ join_command.results }}"
+  when: inventory_hostname in groups['k8s-master']
+
+# - name: fetch join_command from master to local host
+#   fetch:
+#     src: /tmp/join_command
+#     dest: /tmp/join_command
+
+- name: Copy join command from local to the worker nodes.
+  copy:
+    src: /tmp/join_command
+    dest: /tmp/join_command
+    mode: 0777
+  when: inventory_hostname in groups['k8s-worker']
+
+- name:  join cluster 
+  shell: bash /tmp/join_command
+  when: inventory_hostname in groups['k8s-worker']
   
 ...

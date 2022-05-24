@@ -1,7 +1,7 @@
 ---
 
 - hosts: all
-  user: ansible
+  user: hoang
   roles:
     - passwd-rootlogin
     - k8s-preinstall
@@ -9,16 +9,16 @@
     - pre-install
 
 - hosts: all
-  user: ansible
+  user: hoang
   roles:
     - k8s-install
   tags:
     - install
 
-- hosts: k8s-master
-  user: hoang
-  roles:
-    - minikube-install
-  tags:
-    - minikube-install
+# - hosts: k8s-master
+#   user: hoang
+#   roles:
+#     - minikube-install
+#   tags:
+#     - minikube-install
 ...
