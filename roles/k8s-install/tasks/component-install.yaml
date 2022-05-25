@@ -61,6 +61,16 @@
     - "cri-o-runc"
   when: crio_installed == "no"
 
+- name: config crio
+  lineinfile:
+    path: /etc/crio/crio.conf
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - "[crio.runtime]"
+    - conmon_cgroup = "pod"
+    - cgroup_manager = "systemd"
+
 - name: Start and enable CRI-O
   command: "{{ item }}"
   loop:

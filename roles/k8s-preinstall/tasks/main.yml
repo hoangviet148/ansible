@@ -1,7 +1,13 @@
 ---
 
-- name: apt-get update
+- name: clean source
+  file: 
+    path: /var/lib/apt/lists/*
+    state: absent
+
+- name: apt-get clean & update & upgrade
   apt:
+    autoclean: yes
     update_cache: yes
     upgrade: yes
 
@@ -24,8 +30,8 @@
     regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
     replace: '# \1'
 
-- name: reboot
-  reboot:
+# - name: reboot
+#   reboot:
 
 - name: enable br_netfilter module
   modprobe: 
