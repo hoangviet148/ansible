@@ -1,13 +1,13 @@
 ---
 
 - name: clean source
-  file: 
-    path: /var/lib/apt/lists/*
-    state: absent
-
+  shell: "{{ item }}"
+  loop:
+    - rm -rf /var/lib/apt/lists/*
+    - apt clean
+    
 - name: apt-get clean & update & upgrade
   apt:
-    autoclean: yes
     update_cache: yes
     upgrade: yes
 
