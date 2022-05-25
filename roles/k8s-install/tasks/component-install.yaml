@@ -1,5 +1,8 @@
 ---
 
+- name: install docker
+  include_tasks: docker-install.yaml
+
 - name: add k8s key
   apt_key:
     url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
@@ -19,64 +22,14 @@
 - name: install kubectl, kubeadm, kubelet
   apt: 
     name: "{{ item }}"
-    state: latest
+    state: present
   loop:
     - "gnupg2 "
     - "apt-transport-https"
     - "software-properties-common"
-    - "kubectl"
-    - "kubelet"
-    - "kubeadm"
+    - "kubectl=1.20.1-00"
+    - "kubelet=1.20.1-00"
+    - "kubeadm=1.20.1-00"
   when: kube_installed == "no"
-
-- name: add cri-o key
-  apt_key:
-    url: "{{ item }}"
-    state: present
-  loop:
-    - https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:{{VERSION}}/{{OS}}/Release.key
-    - https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{OS}}/Release.key
-  when: crio_key == "no"
-
-- name: add cri-o repo 1
-  apt_repository:
-    repo: deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/{{OS}}/ /
-    filename: devel.kubic.libcontainers.stable
-    update_cache: no
-  when: crio_repo == "no"
-
-- name: add cri-o repo 2
-  apt_repository:
-    repo: deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{VERSION}}/{{OS}}/ /
-    filename: devel.kubic.libcontainers.stable.cri-o.{{VERSION}}
-    update_cache: yes
-  when: crio_repo == "no"
-
-- name: install cri-o
-  apt: 
-    name: "{{ item }}"
-    state: latest
-  loop:
-    - "cri-o"
-    - "cri-o-runc"
-  when: crio_installed == "no"
-
-- name: config crio
-  lineinfile:
-    path: /etc/crio/crio.conf
-    line: "{{ item }}"
-    create: yes
-  loop:
-    - "[crio.runtime]"
-    - conmon_cgroup = "pod"
-    - cgroup_manager = "systemd"
-
-- name: Start and enable CRI-O
-  command: "{{ item }}"
-  loop:
-    - "systemctl daemon-reload"
-    - "systemctl enable crio --now"
-    - "systemctl enable kubelet"
-  when: enable_crio == "no"
 
 ...

@@ -1,15 +1,9 @@
 ---
 
-- name: clean source
-  shell: "{{ item }}"
-  loop:
-    - rm -rf /var/lib/apt/lists/*
-    - apt clean
-    
-- name: apt-get clean & update & upgrade
-  apt:
-    update_cache: yes
-    upgrade: yes
+# - name: apt-get update & upgrade
+#   apt:
+#     update_cache: yes
+#     upgrade: yes
 
 - name: change hosts file
   copy: 

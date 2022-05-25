@@ -10,3 +10,5 @@ init: "no"
 
 OS: xUbuntu_20.04
 VERSION: 1.22
+
+CR: "docker"
