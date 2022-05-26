@@ -19,15 +19,15 @@
     group: root
   when: init == "no"
 
-# - name: edit config file 3
-#   shell: "export KUBECONFIG=/etc/kubernetes/admin.conf"
-#   when: init == "no"
+- name: install calico k8s 1.20 
+  shell: kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
+  when: CR == "docker"
 
-- name: install calico 
-  notify: "install calico k8s 1.20"
-  when: CR = "docker"
+- name: install calico 1.24
+  shell: "{{ item }}"
+  loop: 
+    - kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
+    - kubectl create -f https://projectcalico.docs.tigera.io/manifests/custom-resources.yaml
+  when: CR == "crio"
 
-- name: install calico
-  notify: "install calico k8s 1.24"
-  when: CR = "crio"
 ...
