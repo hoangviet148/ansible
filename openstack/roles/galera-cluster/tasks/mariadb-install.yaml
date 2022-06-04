@@ -1,0 +1,15 @@
+- name: Install mariadb
+  apt: 
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - mariadb-server 
+    - mariadb-client
+
+- name: Allow remote access
+  lineinfile:
+    dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: "bind-address 0.0.0.0"
+    state: present
+    backup: yes

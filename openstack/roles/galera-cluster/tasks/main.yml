@@ -1,2 +1,7 @@
 ---
-# tasks file for galera-cluster
+- name: Mariadb install
+  include_tasks: mariadb-install.yaml
+
+- name: Mariadb secure installation
+  include_tasks: mysql_secure_installation.yaml
+

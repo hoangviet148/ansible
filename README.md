@@ -1,4 +1,4 @@
-# my ansible repository
+# 1. k8s cluster
 
 ### 1. Init ssh connection
 ```
@@ -10,3 +10,4 @@ bash ssh-copy.sh $USER
 ansible-playbook playbook.yaml 
 ```
 
+# 1. openstack
