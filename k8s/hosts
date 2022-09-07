@@ -1,9 +1,9 @@
 [k8s-master]
-192.168.75.128
+192.168.75.128 ansible_ssh_user=hoang ansible_ssh_pass=hoang
 
 [k8s-worker]
-192.168.75.129
-192.168.75.130
+192.168.75.129 ansible_ssh_user=hoang ansible_ssh_pass=hoang
+192.168.75.130 ansible_ssh_user=hoang ansible_ssh_pass=hoang
 
 [linux:children]
 k8s-master
@@ -12,3 +12,4 @@ k8s-worker
 [linux:vars]
 ansible_become=true
 ansible_become_password=hoang
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
