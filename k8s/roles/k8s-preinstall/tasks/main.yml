@@ -1,10 +1,5 @@
 ---
 
-# - name: apt-get update & upgrade
-#   apt:
-#     update_cache: yes
-#     upgrade: yes
-
 - name: change hosts file
   copy: 
     src: "{{ item.src }}" 
@@ -12,7 +7,6 @@
   with_items:
   - { src: '../files/hosts', dest: '/etc' }
   - { src: '../files/k8s.conf', dest: '/etc/sysctl.d' }
-
 
 - name: disable swap 
   shell: swapoff -a
@@ -23,9 +17,6 @@
     path: /etc/fstab
     regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
     replace: '# \1'
-
-# - name: reboot
-#   reboot:
 
 - name: enable br_netfilter module
   modprobe: 

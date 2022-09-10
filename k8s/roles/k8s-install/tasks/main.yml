@@ -18,11 +18,6 @@
   loop: "{{ join_command.results }}"
   when: inventory_hostname in groups['k8s-master']
 
-# - name: fetch join_command from master to local host
-#   fetch:
-#     src: /tmp/join_command
-#     dest: /tmp/join_command
-
 - name: Copy join command from local to the worker nodes.
   copy:
     src: /tmp/join_command
