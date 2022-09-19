@@ -1,4 +1,18 @@
 ---
+- hosts: all
+  user: hoang
+  roles:
+    - nfs-install
+  tags:
+    - nfs-install
+
+- hosts: all
+  user: hoang
+  roles:
+    - passwd-rootlogin
+    - k8s-preinstall
+  tags:
+    - pre-install
 
 - hosts: all
   user: hoang
@@ -14,11 +28,4 @@
     - k8s-install
   tags:
     - install
-
-# - hosts: k8s-master
-#   user: hoang
-#   roles:
-#     - minikube-install
-#   tags:
-#     - minikube-install
 ...

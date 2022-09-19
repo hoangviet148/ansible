@@ -1,2 +1,7 @@
 ---
-# defaults file for nfs-install
+nfs_exports: [ "/nfs *(rw,sync,no_root_squash,no_subtree_check)" ]
+
+nfs_rpcbind_state: started
+nfs_rpcbind_enabled: true
+
+fstab: master:/nfs /nfs/ nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0

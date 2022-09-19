@@ -1,0 +1,33 @@
+---
+- name: "Read device information /dev/sdb"
+      parted: 
+        device: "/dev/sdb"
+        unit: MiB
+      register: device_info
+
+- name: create partition from block devices
+  parted:
+     device: /dev/sdb
+     number: 1
+     flags: [ lvm ]
+     state: present
+     part_end: "100%"
+     part_start: "{{ device_info.partitions[0].end + 1}}MiB" 
+
+- name: format the partition
+  filesystem:
+     fstype: ext4
+     dev: /dev/sdb1
+
+- name: Create share directory
+  file:  # noqa 208
+    path: "{{ item.strip().split()[0] }}"
+    state: directory
+  with_items: "{{ nfs_exports }}"
+
+- name: mount new partition to /nfs
+  mount:
+    fstype: ext4
+    src: /dev/sdb1
+    path: /nfs
+    state: mounted

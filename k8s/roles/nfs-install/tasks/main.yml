@@ -1,2 +1,37 @@
 ---
-# tasks file for nfs-install
+- name: Install nfs server
+  apt:
+      name:
+        - nfs-kernel-server
+      state: present
+  when: inventory_hostname in groups['k8s-master']
+
+- name: Install nfs client
+  apt:
+      name:
+        - nfs-common
+      state: present
+
+- name: Copy exports file.
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+  when: inventory_hostname in groups['k8s-master']
+  notify: reload nfs
+
+- name: Create mount point on the client
+  command: mount master:/nfs /nfs
+
+- name: mount nfs share during boot on client
+  lineinfile:
+    path: /etc/fstab
+    line: {{ item }}
+  with_items: "{{ fstab }}"
+  when: inventory_hostname in groups['k8s-worker']
+
+- name: Ensure nfs is running.
+  service: "name={{ nfs_server_daemon }} state=started enabled=yes"
+  when: nfs_exports|length
