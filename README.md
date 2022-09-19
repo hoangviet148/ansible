@@ -1,13 +1,5 @@
-# 1. k8s cluster
-
-### 1. Init ssh connection
+# k8s cluster
 ```
-bash ssh-copy.sh $USER
-```
-
-### 2. Install cluster
-```
+cd k8s
 ansible-playbook playbook.yaml 
 ```
-
-# 1. openstack
