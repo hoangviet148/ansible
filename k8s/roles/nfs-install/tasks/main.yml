@@ -27,7 +27,8 @@
   notify: reload nfs
 
 - name: Create mount point on the client
-  command: mount master:/nfs /nfs
+  shell: mount 192.168.75.128:/nfs /nfs
+  when: inventory_hostname in groups['k8s-worker']
 
 - name: mount nfs share during boot on client
   lineinfile:
@@ -37,5 +38,5 @@
   when: inventory_hostname in groups['k8s-worker']
 
 - name: Ensure nfs is running.
-  service: "name={{ nfs_server_daemon }} state=started enabled=yes"
+  service: "name=nfs-kernel-server state=started enabled=yes"
   when: nfs_exports|length

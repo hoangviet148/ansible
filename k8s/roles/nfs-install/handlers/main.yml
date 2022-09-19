@@ -3,4 +3,7 @@
   command: 'service nfs-kernel-server restart'
 
 - name: reload nfs-common
-  command: 'service nfs-common restart'
+  shell: |
+    rm /lib/systemd/system/nfs-common.service
+    systemctl daemon-reload
+    service nfs-common start

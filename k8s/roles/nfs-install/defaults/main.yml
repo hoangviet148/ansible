@@ -1,7 +1,7 @@
 ---
-nfs_exports: [ "/nfs *(rw,sync,no_root_squash,no_subtree_check)" ]
+nfs_exports: [ "/nfs *(rw,sync,no_subtree_check)" ]
 
 nfs_rpcbind_state: started
 nfs_rpcbind_enabled: true
 
-fstab: master:/nfs /nfs/ nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0
+fstab: "192.168.75.128:/nfs /nfs/ nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0"
