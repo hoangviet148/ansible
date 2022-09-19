@@ -28,7 +28,7 @@
 - name: mount nfs share during boot on client
   lineinfile:
     path: /etc/fstab
-    line: {{ item }}
+    line: "{{ item }}"
   with_items: "{{ fstab }}"
   when: inventory_hostname in groups['k8s-worker']
 
