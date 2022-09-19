@@ -1,4 +1,7 @@
 ---
+- name: create partition
+  include_tasks: create_partition.yaml
+
 - name: Install nfs server
   apt:
       name:
