@@ -1,3 +1,6 @@
 ---
 - name: reload nfs
-  command: 'exportfs -ra'
+  command: 'service nfs-kernel-server restart'
+
+- name: reload nfs-common
+  command: 'service nfs-common restart'

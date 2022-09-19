@@ -4,16 +4,17 @@
 
 - name: Install nfs server
   apt:
-      name:
-        - nfs-kernel-server
-      state: present
+    name:
+      - nfs-kernel-server
+    state: present
   when: inventory_hostname in groups['k8s-master']
 
 - name: Install nfs client
   apt:
-      name:
-        - nfs-common
-      state: present
+    name:
+      - nfs-common
+    state: present
+  notify: reload nfs-common
 
 - name: Copy exports file.
   template:
