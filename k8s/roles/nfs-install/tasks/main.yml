@@ -14,7 +14,8 @@
     name:
       - nfs-common
     state: present
-  notify: reload nfs-common
+  when: inventory_hostname in groups['k8s-worker']
+  notify: "reload nfs-common"
 
 - name: Copy exports file.
   template:
@@ -24,7 +25,7 @@
     group: root
     mode: 0644
   when: inventory_hostname in groups['k8s-master']
-  notify: reload nfs
+  notify: "reload nfs-server"
 
 - name: Create mount point on the client
   shell: mount {{ nfs_server }}:/nfs /nfs

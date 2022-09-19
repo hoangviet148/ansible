@@ -1,5 +1,5 @@
 ---
-- name: reload nfs
+- name: reload nfs-server
   shell: |
     service nfs-kernel-server restart
     exportfs -rav
