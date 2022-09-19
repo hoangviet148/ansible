@@ -15,7 +15,13 @@
       - nfs-common
     state: present
   when: inventory_hostname in groups['k8s-worker']
-  notify: "reload nfs-common"
+
+- name: reload nfs-common
+  shell: |
+    rm /lib/systemd/system/nfs-common.service
+    systemctl daemon-reload
+    service nfs-common start
+  when: inventory_hostname in groups['k8s-worker']
 
 - name: Copy exports file.
   template:
@@ -25,7 +31,12 @@
     group: root
     mode: 0644
   when: inventory_hostname in groups['k8s-master']
-  notify: "reload nfs-server"
+
+- name: reload nfs-server
+  shell: |
+    service nfs-kernel-server restart
+    exportfs -rav
+  when: inventory_hostname in groups['k8s-master']
 
 - name: Create mount point on the client
   shell: mount {{ nfs_server }}:/nfs /nfs
