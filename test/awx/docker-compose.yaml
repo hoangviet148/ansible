@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: awx_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: awx_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  awx:
+    image: ansible/awx:17.1.0
+    container_name: awx
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      SECRET_KEY: ${AWX_SECRET_KEY}
+      DATABASE_URL: postgresql://awx:awxpass@postgres:5432/awx
+      RABBITMQ_URL: amqp://awx:awxpass@rabbitmq:5672/
+      ADMIN_USER: ${AWX_ADMIN_USER}
+      ADMIN_PASSWORD: ${AWX_ADMIN_PASSWORD}
+    ports:
+      - "80:8052"
+    volumes:
+      - awx_data:/var/lib/awx
+
+volumes:
+  postgres_data:
+  awx_data:
