@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 
 # Install updates and OpenSSH server
 RUN apt-get update && \
-    apt-get install -y openssh-server telnet net-tools vim && \
+    apt-get install -y openssh-server telnet net-tools vim ansible sshpass iproute2 && \
     # Clean up the apt cache to reduce the image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -19,6 +19,3 @@ RUN sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh
 
 # Expose port 22
 EXPOSE 22
-
-# Start the OpenSSH server
-CMD server ssh start

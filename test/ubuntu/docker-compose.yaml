@@ -1,29 +1,32 @@
 version: '3.8'
 
 services:
+  ubuntu0:
+    image: ubuntu:22.04-custom
+    container_name: ubuntu0
+    command: bash -c "service ssh start && sleep infinity"
+    volumes:
+      - /Users/hoangnv3/Documents/hoangnv3-demo/ansible:/root/ansible
+    tty: true
+    stdin_open: true  # Allows interaction
+    
   ubuntu1:
     image: ubuntu:22.04-custom
     container_name: ubuntu1
-    command: ["sleep", "infinity"]  # Keeps the container running
+    command: bash -c "service ssh start && sleep infinity"
     tty: true
     stdin_open: true  # Allows interaction
-    ports:
-      - "8081:22"
-
+    
   ubuntu2:
     image: ubuntu:22.04-custom
     container_name: ubuntu2
-    command: ["sleep", "infinity"]
+    command: bash -c "service ssh start && sleep infinity"
     tty: true
     stdin_open: true
-    ports:
-      - "8082:22"
 
   ubuntu3:
     image: ubuntu:22.04-custom
     container_name: ubuntu3
-    command: ["sleep", "infinity"]
+    command: bash -c "service ssh start && sleep infinity"
     tty: true
     stdin_open: true
-    ports:
-      - "8083:22"
