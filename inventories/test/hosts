@@ -1,0 +1,4 @@
+[kafka]
+ubuntu1 ansible_ssh_user=root ansible_ssh_pass=root ansible_port=22 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ubuntu2 ansible_ssh_user=root ansible_ssh_pass=root ansible_port=22 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ubuntu3 ansible_ssh_user=root ansible_ssh_pass=root ansible_port=22 ansible_ssh_common_args='-o StrictHostKeyChecking=no'

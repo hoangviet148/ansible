@@ -1,6 +1,9 @@
 ---
 kafka_path: /opt/kafka
-kafka_vers: 3.0.0
+kafka_vers: 3.8.0
 scala_vers: 2.13
-zookeeper_datadir: /opt/kafka/zookeeper
-...
+default_partitions_number: 4
+kafka_service_ips:
+  - "172.21.0.3"
+  - "172.21.0.4"
+  - "172.21.0.5"
